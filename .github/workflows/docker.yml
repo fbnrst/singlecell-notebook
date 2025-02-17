@@ -89,7 +89,11 @@ jobs:
           docker run --privileged --rm tonistiigi/binfmt --install all
           docker buildx create --use --name mybuilder 
           docker images
-          docker buildx build --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest --push image/
+          docker buildx build \
+            --platform linux/amd64,linux/arm64,linux/arm64 \
+            --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
+            --push \
+            image/
         env:
           DOCKER_BUILDKIT: 1
           # Full logs for CI build
