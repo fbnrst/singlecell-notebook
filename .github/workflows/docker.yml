@@ -88,6 +88,6 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: echo "${{ secrets.QUAY_IO_PASSWORD }}" | docker login quay.io -u "${{ env.OWNER }}" --password-stdin
 
-      - name: Push Image to Docker Hub 📤
+      - name: Push Image to Quay.io 📤
         if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
-        run: docker push --all-tags ${{ env.OWNER }}/${{ env.IMAGE_NAME }}
+        run: docker push --all-tags quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}
