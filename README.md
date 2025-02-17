@@ -1,3 +1,5 @@
+[![Build](https://github.com/fbnrst/singlecell-notebook/actions/workflows/docker.yml/badge.svg)](https://github.com/fbnrst/singlecell-notebook/actions/workflows/docker.yml)
+
 # singlecell-notebook
 
 singlecell-notebook is a Jupyter Docker Stack image for single-cell sequencing analysis. It is based on the [jupyter/datascience-notebook](quay.io/jupyter/datascience-notebook) image.
