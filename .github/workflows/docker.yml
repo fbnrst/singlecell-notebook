@@ -66,6 +66,7 @@ jobs:
           docker pull ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test || true
           docker pull ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest || true
           docker build --rm --force-rm \
+            --build-arg BUILDKIT_INLINE_CACHE=1
             --cache-from=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test \
             --cache-from=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
             --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest image/
@@ -112,9 +113,6 @@ jobs:
           docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test /opt/conda/bin/python /tests/test_python.py
           docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test /opt/conda/bin/R /tests/test_R.py
 
-      - name: Update tag on DockerHub 📤
+      - name: Push Image to Docker Hub 📤
         if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
-        run: |
-          - docker buildx imagetools create 
-              --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest
-              ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test
+        run: docker push --all-tags ${{ env.OWNER }}/${{ env.IMAGE_NAME }}
