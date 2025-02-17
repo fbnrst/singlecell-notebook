@@ -42,6 +42,9 @@ jobs:
       - name: Checkout Repo ⚡️
         uses: actions/checkout@v4
 
+      - name: Show content
+        run: ls -la
+
       - name: Set Up Python 🐍
         uses: actions/setup-python@v5
         with:
