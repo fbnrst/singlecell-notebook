@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/datascience-notebook:x86_64-latest
+FROM quay.io/jupyter/datascience-notebook:latest
 
 # USER root
 # RUN curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.6.40/quarto-1.6.40-linux-amd64.deb && \
