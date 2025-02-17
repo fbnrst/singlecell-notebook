@@ -47,6 +47,9 @@ RUN mamba install --yes \
 
 RUN pip install --no-cache-dir fastcluster
 
+# import decoupler to compile numba source code
+RUN python -c "import decoupler"
+
 USER root
 
 ARG CONTAINER_BUILD_DATE
