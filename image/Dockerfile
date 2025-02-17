@@ -45,4 +45,4 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-RUN pip install --no-cache-dir fastcluster multicore-tsne
+RUN pip install --no-cache-dir fastcluster
