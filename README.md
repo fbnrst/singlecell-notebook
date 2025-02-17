@@ -2,7 +2,7 @@
 
 # singlecell-notebook
 
-singlecell-notebook is a Jupyter Docker Stack image for single-cell sequencing analysis. It is based on the [jupyter/datascience-notebook](quay.io/jupyter/datascience-notebook) image.
+singlecell-notebook is a Jupyter Docker Stack image for single-cell sequencing analysis. It is based on the [jupyter/datascience-notebook](quay.io/jupyter/datascience-notebook) image and the [singularity single cell container](https://gitlab.hrz.tu-chemnitz.de/dcgc-bfx/singularity/singularity-single-cell).
 
 To start a JupyterLab server with the latest `singlecell-notebook` container, run:
 
