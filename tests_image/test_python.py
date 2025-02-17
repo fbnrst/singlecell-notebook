@@ -1,6 +1,7 @@
 #!/opt/conda/bin/python
 
 import anndata2ri
+import decoupler
 import numpy as np
 import scanpy as sc
 import scipy as sp
