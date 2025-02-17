@@ -113,6 +113,10 @@ jobs:
           docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test /opt/conda/bin/python /tests/test_python.py
           docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test /opt/conda/bin/R /tests/test_R.py
 
+      - name: Tag image with latest 🏷
+        if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+        run: docker tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest
+
       - name: Push Image to Docker Hub 📤
         if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
         run: docker push --all-tags ${{ env.OWNER }}/${{ env.IMAGE_NAME }}
