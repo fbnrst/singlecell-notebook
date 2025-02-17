@@ -9,8 +9,8 @@ env:
 # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
 on:
   schedule:
-    # Daily, at 07:00 UTC time
-    - cron: "0 7 * * *"
+    # Weekly, every Monday at 21:26 UTC+1
+    - cron: "26 20 * * 1"
   pull_request:
     paths:
       - ".github/workflows/docker.yml"
