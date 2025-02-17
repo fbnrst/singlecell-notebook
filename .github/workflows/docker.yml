@@ -64,13 +64,13 @@ jobs:
       - name: Set TAG variable based on event type
         id: set_tag
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "TAG=aarch64-latest" >> $GITHUB_ENV
-          elif [[ "${{ github.event_name }}" == "schedule" ]]; then
-            echo "TAG=aarch64-$(date +%Y-%m-%d)" >> $GITHUB_ENV
-          else
-            echo "TAG=aarch64-${{steps.get_sha.outputs.sha12}}" >> $GITHUB_ENV
-          fi
+            if [[ "${{ github.event_name }}" == "schedule" ]]; then
+              echo "TAG=aarch64-$(date +%Y-%m-%d)" >> $GITHUB_ENV
+            elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+              echo "TAG=aarch64-latest" >> $GITHUB_ENV
+            else
+              echo "TAG=aarch64-${{steps.get_sha.outputs.sha12}}" >> $GITHUB_ENV
+            fi
 
       - name: Build image 🛠
         run: |
@@ -135,13 +135,13 @@ jobs:
       - name: Set TAG variable based on event type
         id: set_tag
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "TAG=x86-latest" >> $GITHUB_ENV
-          elif [[ "${{ github.event_name }}" == "schedule" ]]; then
-            echo "TAG=x86-$(date +%Y-%m-%d)" >> $GITHUB_ENV
-          else
-            echo "TAG=x86-${{steps.get_sha.outputs.sha12}}" >> $GITHUB_ENV
-          fi
+            if [[ "${{ github.event_name }}" == "schedule" ]]; then
+              echo "TAG=x86-$(date +%Y-%m-%d)" >> $GITHUB_ENV
+            elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+              echo "TAG=x86-latest" >> $GITHUB_ENV
+            else
+              echo "TAG=x86-${{steps.get_sha.outputs.sha12}}" >> $GITHUB_ENV
+            fi
 
       - name: Build image 🛠
         run: |
