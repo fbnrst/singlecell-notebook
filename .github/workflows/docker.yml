@@ -103,4 +103,6 @@ jobs:
 
       - name: Push Image to Quay.io 📤
         if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
-        run: docker push --all-tags quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}
+        run: |
+          docker tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
+          docker push quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
