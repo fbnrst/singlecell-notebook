@@ -77,7 +77,7 @@ jobs:
       - name: Run image tests
         run: |
           docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/python /tests/test_python.py
-          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/Rscript /tests/test_R.py
+          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/Rscript /tests/test_R.R
 
       # - name: Login to Docker Hub 🔐
       #   if: github.ref == 'refs/heads/main'
