@@ -202,7 +202,7 @@ jobs:
       - name: Create and push multi-architecture manifest 📤
         run: |
           docker manifest create quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} \
-            quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:aaarch64-${{ env.TAG }} \
+            quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:aarch64-${{ env.TAG }} \
             quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:x86-${{ env.TAG }}
 
           docker manifest push quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
