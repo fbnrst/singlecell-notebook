@@ -5,7 +5,7 @@ import numpy as np
 import scanpy as sc
 import scipy as sp
 from scipy.cluster.vq import kmeans2
-from scipy.sparse import load_npz
+from scipy.sparse import random
 from sklearn.decomposition import PCA
 import session_info
 import spatialdata_io
@@ -21,8 +21,7 @@ anndata2ri.py2rpy(adata)
 
 # reproducibility sklearn
 print('Reproducibility of pca for sparse data using sklearn')
-X = load_npz('/tests/data/sparse_pca_test.npz')
-#X = X.A
+X = random(2700, 32738, density=2286884/(2700*32738), format='csr', dtype='int32', data_rvs=lambda s: np.random.randint(0, 501, size=s))
 
 pca_ = PCA(n_components=50, svd_solver='arpack', random_state=0)
 X_pca_0 = pca_.fit_transform(X).copy()
