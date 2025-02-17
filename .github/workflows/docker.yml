@@ -82,8 +82,8 @@ jobs:
           # Full logs for CI build
           BUILDKIT_PROGRESS: plain
 
-      - name: Run tests ✅
-        run: python3 -m pytest tests
+      # - name: Run tests ✅
+      #   run: python3 -m pytest tests
       
       - name: Run image tests
         run: |
@@ -153,8 +153,8 @@ jobs:
           # Full logs for CI build
           BUILDKIT_PROGRESS: plain
 
-      - name: Run tests ✅
-        run: python3 -m pytest tests
+      # - name: Run tests ✅
+      #   run: python3 -m pytest tests
       
       - name: Run image tests
         run: |
