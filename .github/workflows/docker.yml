@@ -42,9 +42,6 @@ jobs:
       - name: Checkout Repo ⚡️
         uses: actions/checkout@v4
 
-      - name: Show content
-        run: ls -la
-
       - name: Set Up Python 🐍
         uses: actions/setup-python@v5
         with:
@@ -62,8 +59,11 @@ jobs:
         id: get_sha
 
       - name: Build image 🛠
-        run: docker build --rm --force-rm --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest image/
-        # --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}}
+        run: |
+          docker build --rm --force-rm \
+            --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
+            --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}} \
+            image/ 
         env:
           DOCKER_BUILDKIT: 1
           # Full logs for CI build
@@ -75,7 +75,7 @@ jobs:
       - name: Run image tests
         run: |
           docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/python /tests/test_python.py
-          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/R /tests/test_R.py
+          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/Rscript /tests/test_R.py
 
       - name: Login to Docker Hub 🔐
         if: github.ref == 'refs/heads/main'

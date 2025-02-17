@@ -38,7 +38,6 @@ for i in range(3):
         session_info.show(html=False)
         raise AssertionError(f"Re-computed PCA is not the same. Maximum absolute difference: {np.abs(X_pca_0 - X_pca).max()}")
 
-session_info.show(html=False)
 
 # now scanpy tests
 
@@ -46,7 +45,6 @@ session_info.show(html=False)
 print('Reproducibility of pca for dense data using scanpy')
 
 adata = sc.datasets.pbmc3k()
-#adata.X = adata.X.A
 
 sc.pp.normalize_per_cell(adata)
 sc.pp.log1p(adata)
