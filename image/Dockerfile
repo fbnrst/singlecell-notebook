@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/datascience-notebook
+FROM quay.io/jupyter/datascience-notebook:x86_64-2025-02-12
 
 # for this to work, this eneds to become aware of the architecure amd64/arm64
 # USER root

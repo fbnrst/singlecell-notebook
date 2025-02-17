@@ -84,16 +84,16 @@ jobs:
           docker buildx create --use --name mybuilder 
           docker images
           docker buildx build \
-          --build-arg CONTAINER_BUILD_DATE="${CI_JOB_STARTED_AT}"  \
-          --build-arg CONTAINER_GIT_NAME="${CI_PROJECT_NAME}" \
-          --build-arg CONTAINER_GIT_URL="${CI_PROJECT_URL}" \
-          --build-arg CONTAINER_GIT_COMMIT_ID="${CI_COMMIT_SHORT_SHA}" \
-          --build-arg CONTAINER_VERSION="${CI_COMMIT_REF_NAME}"  \
-          --build-arg BUILDKIT_INLINE_CACHE=1 \
-          --cache-from=type=registry,ref=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test \
-          --cache-from=type=registry,ref=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
-          --cache-to=type=registry,ref=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test,mode=max \
-            --platform linux/amd64,linux/arm64,linux/arm64 \
+            --build-arg CONTAINER_BUILD_DATE="${CI_JOB_STARTED_AT}"  \
+            --build-arg CONTAINER_GIT_NAME="${CI_PROJECT_NAME}" \
+            --build-arg CONTAINER_GIT_URL="${CI_PROJECT_URL}" \
+            --build-arg CONTAINER_GIT_COMMIT_ID="${CI_COMMIT_SHORT_SHA}" \
+            --build-arg CONTAINER_VERSION="${CI_COMMIT_REF_NAME}"  \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --cache-from=type=registry,ref=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test \
+            --cache-from=type=registry,ref=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
+            --cache-to=type=registry,ref=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test,mode=max \
+            --platform linux/amd64 \
             --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test \
             --push \
             image/
