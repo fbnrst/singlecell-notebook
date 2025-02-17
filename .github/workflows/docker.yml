@@ -69,14 +69,6 @@ jobs:
       #     # Full logs for CI build
       #     BUILDKIT_PROGRESS: plain
 
-      # - name: Run tests ✅
-      #   run: python3 -m pytest tests
-      
-      # - name: Run image tests
-      #   run: |
-      #     docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/python /tests/test_python.py
-      #     docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/R /tests/test_R.py
-
       - name: Login to Docker Hub 🔐
         # if: github.ref == 'refs/heads/main'
         uses: docker/login-action@v3
@@ -91,7 +83,7 @@ jobs:
           docker images
           docker buildx build \
             --platform linux/amd64,linux/arm64,linux/arm64 \
-            --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
+            --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test \
             --push \
             image/
         env:
@@ -99,8 +91,17 @@ jobs:
           # Full logs for CI build
           BUILDKIT_PROGRESS: plain
 
+      - name: Run tests ✅
+        run: python3 -m pytest tests
+      
+      - name: Run image tests
+        run: |
+          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test /opt/conda/bin/python /tests/test_python.py
+          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test /opt/conda/bin/R /tests/test_R.py
 
-
-      # - name: Push Image to Docker Hub 📤
-      #   if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
-      #   run: docker push --all-tags ${{ env.OWNER }}/${{ env.IMAGE_NAME }}
+      - name: Update tag on DockerHub 📤
+        if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+        run: |
+          - docker buildx imagetools create 
+              --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest
+              ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test
