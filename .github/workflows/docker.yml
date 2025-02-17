@@ -36,9 +36,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-test-publish-images:
+  build-test-publish-images_aarch64:
     runs-on: ubuntu-22.04-arm
-    # runs-on: ubuntu-latest
     permissions:
       contents: write
 
@@ -66,11 +65,11 @@ jobs:
         id: set_tag
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "TAG=latest" >> $GITHUB_ENV
+            echo "TAG=aarch64-latest" >> $GITHUB_ENV
           elif [[ "${{ github.event_name }}" == "schedule" ]]; then
-            echo "TAG=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+            echo "TAG=aarch64-$(date +%Y-%m-%d)" >> $GITHUB_ENV
           else
-            echo "TAG=${{steps.get_sha.outputs.sha12}}" >> $GITHUB_ENV
+            echo "TAG=aarch64-${{steps.get_sha.outputs.sha12}}" >> $GITHUB_ENV
           fi
 
       - name: Build image 🛠
@@ -107,3 +106,101 @@ jobs:
         run: |
           docker tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
           docker push quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
+
+  build-test-publish-images_x86:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repo ⚡️
+        uses: actions/checkout@v4
+
+      - name: Set Up Python 🐍
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install Dev Dependencies 📦
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade -r requirements-dev.txt
+
+      - name: Get commit sha, this will be used as a tag later on 🏷
+        shell: bash
+        run: |
+          echo "sha12=$(echo ${GITHUB_SHA} | cut -c1-12)" >> $GITHUB_OUTPUT
+        id: get_sha
+
+      - name: Set TAG variable based on event type
+        id: set_tag
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "TAG=x86-latest" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "schedule" ]]; then
+            echo "TAG=x86-$(date +%Y-%m-%d)" >> $GITHUB_ENV
+          else
+            echo "TAG=x86-${{steps.get_sha.outputs.sha12}}" >> $GITHUB_ENV
+          fi
+
+      - name: Build image 🛠
+        run: |
+          docker build --rm --force-rm \
+            --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} \
+            image/ 
+        env:
+          DOCKER_BUILDKIT: 1
+          # Full logs for CI build
+          BUILDKIT_PROGRESS: plain
+
+      - name: Run tests ✅
+        run: python3 -m pytest tests
+      
+      - name: Run image tests
+        run: |
+          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} /opt/conda/bin/python /tests/test_python.py
+          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} /opt/conda/bin/Rscript /tests/test_R.R
+
+      # - name: Login to Docker Hub 🔐
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ env.OWNER }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+      - name: Login to Quay.io 🔐
+        if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+        run: echo "${{ secrets.QUAY_IO_PASSWORD }}" | docker login quay.io -u "${{ env.OWNER }}" --password-stdin
+
+      - name: Push Image to Quay.io 📤
+        if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+        run: |
+          docker tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
+          docker push quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
+  
+  create-multiarch-manifest:
+    runs-on: ubuntu-latest
+    needs: [build-test-publish-images_aarch64, build-test-publish-images_x86]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+    steps:
+      - name: Login to Quay.io 🔐
+        run: echo "${{ secrets.QUAY_IO_PASSWORD }}" | docker login quay.io -u "${{ env.OWNER }}" --password-stdin
+
+      - name: Set TAG variable based on event type
+        id: set_tag
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "TAG=latest" >> $GITHUB_ENV
+          elif [[ "${{ github.event_name }}" == "schedule" ]]; then
+            echo "TAG=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+          else
+            echo "TAG=${{steps.get_sha.outputs.sha12}}" >> $GITHUB_ENV
+          fi
+
+      - name: Create and push multi-architecture manifest 📤
+        run: |
+          docker manifest create quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} \
+            quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:aaarch64-${{ env.TAG }} \
+            quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:x86-${{ env.TAG }}
+
+          docker manifest push quay.io/${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
