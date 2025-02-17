@@ -76,14 +76,15 @@ jobs:
         run: |
           docker build --rm --force-rm \
             --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} \
+            --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
             image/ 
         env:
           DOCKER_BUILDKIT: 1
           # Full logs for CI build
           BUILDKIT_PROGRESS: plain
 
-      # - name: Run tests ✅
-      #   run: python3 -m pytest tests
+      - name: Run tests ✅
+        run: python3 -m pytest tests
       
       - name: Run image tests
         run: |
@@ -147,14 +148,15 @@ jobs:
         run: |
           docker build --rm --force-rm \
             --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} \
+            --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
             image/ 
         env:
           DOCKER_BUILDKIT: 1
           # Full logs for CI build
           BUILDKIT_PROGRESS: plain
 
-      # - name: Run tests ✅
-      #   run: python3 -m pytest tests
+      - name: Run tests ✅
+        run: python3 -m pytest tests
       
       - name: Run image tests
         run: |
