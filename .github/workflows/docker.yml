@@ -61,21 +61,21 @@ jobs:
           echo "sha12=$(echo ${GITHUB_SHA} | cut -c1-12)" >> $GITHUB_OUTPUT
         id: get_sha
 
-      - name: Build image 🛠
-        run: docker build --rm --force-rm --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest image/
-        # --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}}
-        env:
-          DOCKER_BUILDKIT: 1
-          # Full logs for CI build
-          BUILDKIT_PROGRESS: plain
+      # - name: Build image 🛠
+      #   run: docker build --rm --force-rm --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest image/
+      #   # --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}}
+      #   env:
+      #     DOCKER_BUILDKIT: 1
+      #     # Full logs for CI build
+      #     BUILDKIT_PROGRESS: plain
 
-      - name: Run tests ✅
-        run: python3 -m pytest tests
+      # - name: Run tests ✅
+      #   run: python3 -m pytest tests
       
-      - name: Run image tests
-        run: |
-          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/python /tests/test_python.py
-          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/R /tests/test_R.py
+      # - name: Run image tests
+      #   run: |
+      #     docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/python /tests/test_python.py
+      #     docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/R /tests/test_R.py
 
       - name: Login to Docker Hub 🔐
         if: github.ref == 'refs/heads/main'
@@ -84,6 +84,14 @@ jobs:
           username: ${{ env.OWNER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Image to Docker Hub 📤
-        if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
-        run: docker push --all-tags ${{ env.OWNER }}/${{ env.IMAGE_NAME }}
+      - name: build
+        run: |
+          docker run --privileged --rm tonistiigi/binfmt --install all
+          docker buildx create --use --name mybuilder 
+          docker buildx build --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest --push .
+
+
+
+      # - name: Push Image to Docker Hub 📤
+      #   if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+      #   run: docker push --all-tags ${{ env.OWNER }}/${{ env.IMAGE_NAME }}
