@@ -67,6 +67,9 @@ jobs:
 
       - name: Run tests ✅
         run: python3 -m pytest tests
+      
+      - name: Run tests2
+        run: docker run --rm -v $(pwd)/tests2:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/python /tests/test_python.py
 
       - name: Login to Docker Hub 🔐
         if: github.ref == 'refs/heads/main'
