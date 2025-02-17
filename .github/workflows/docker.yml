@@ -62,7 +62,8 @@ jobs:
         id: get_sha
 
       - name: Build image 🛠
-        run: docker build --rm --force-rm --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}} image/
+        run: docker build --rm --force-rm --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest image/
+        # --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}}
         env:
           DOCKER_BUILDKIT: 1
           # Full logs for CI build
@@ -71,8 +72,10 @@ jobs:
       - name: Run tests ✅
         run: python3 -m pytest tests
       
-      - name: Run tests2
-        run: docker run --rm -v ./tests2:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/python /tests/test_singlecell.py
+      - name: Run image tests
+        run: |
+          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/python /tests/test_python.py
+          docker run --rm -v ./tests_image:/tests ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest /opt/conda/bin/R /tests/test_R.py
 
       - name: Login to Docker Hub 🔐
         if: github.ref == 'refs/heads/main'
