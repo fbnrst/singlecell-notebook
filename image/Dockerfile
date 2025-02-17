@@ -15,10 +15,8 @@ RUN mamba install --yes \
     'anndata2ri' \
     'arboreto' \
     'bbknn' \
-    'cellpose' \
     'celltypist' \
     'decoupler' \
-    'fastcluster' \
     'gseapy' \
     'harmonypy' \ 
     'leidenalg' \
@@ -26,7 +24,6 @@ RUN mamba install --yes \
     'louvain' \
     'mscorefonts' \
     'mudata' \
-    'multicore-tsne' \
     'muon' \
     'openpyxl' \
     'pybiomart' \
@@ -47,3 +44,5 @@ RUN mamba install --yes \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
+
+RUN pip install --no-cache-dir fastcluster multicore-tsne
