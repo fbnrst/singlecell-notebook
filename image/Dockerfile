@@ -16,7 +16,7 @@ RUN mamba install --yes \
     'arboreto' \
     'bbknn' \
     'celltypist' \
-    'decoupler' \
+    'decoupler-py' \
     'gseapy' \
     'harmonypy' \ 
     'leidenalg' \
@@ -46,6 +46,9 @@ RUN mamba install --yes \
     fix-permissions "/home/${NB_USER}"
 
 RUN pip install --no-cache-dir fastcluster
+
+# import decoupler to combile numba
+RUN python -c "import decoupler"
 
 USER root
 
