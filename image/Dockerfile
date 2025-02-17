@@ -33,7 +33,7 @@ RUN mamba install --yes \
     'pybiomart' \
     'python-igraph' \
     'scanorama' \
-    'scanpy' \
+    'scanpy>=1.10' \
     'scirpy' \
     'scrublet' \
     'scvi-tools' \
