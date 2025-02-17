@@ -8,7 +8,6 @@ from scipy.cluster.vq import kmeans2
 from scipy.sparse import random
 from sklearn.decomposition import PCA
 import session_info
-import spatialdata_io
 
 import os
 print('Current working directory:')
