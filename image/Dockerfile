@@ -1,10 +1,10 @@
 FROM quay.io/jupyter/datascience-notebook
 
-USER root
-
-RUN curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.6.40/quarto-1.6.40-linux-amd64.deb && \
-    dpkg -i quarto-1.6.40-linux-amd64.deb && \
-    rm quarto-1.6.40-linux-amd64.deb
+# for this to work, this eneds to become aware of the architecure amd64/arm64
+# USER root
+# RUN curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.6.40/quarto-1.6.40-linux-amd64.deb && \
+#     dpkg -i quarto-1.6.40-linux-amd64.deb && \
+#     rm quarto-1.6.40-linux-amd64.deb
 
 USER ${NB_UID}
 
