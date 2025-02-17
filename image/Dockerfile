@@ -1,10 +1,9 @@
-FROM quay.io/jupyter/datascience-notebook:x86_64-latest
+FROM quay.io/jupyter/datascience-notebook:latest
 
-USER root
-
-RUN curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.6.40/quarto-1.6.40-linux-amd64.deb && \
-    dpkg -i quarto-1.6.40-linux-amd64.deb && \
-    rm quarto-1.6.40-linux-amd64.deb
+# USER root
+# RUN curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.6.40/quarto-1.6.40-linux-amd64.deb && \
+#     dpkg -i quarto-1.6.40-linux-amd64.deb && \
+#     rm quarto-1.6.40-linux-amd64.deb
 
 USER ${NB_UID}
 
@@ -16,10 +15,8 @@ RUN mamba install --yes \
     'anndata2ri' \
     'arboreto' \
     'bbknn' \
-    'cellpose' \
     'celltypist' \
     'decoupler' \
-    'fastcluster' \
     'gseapy' \
     'harmonypy' \ 
     'leidenalg' \
@@ -27,7 +24,6 @@ RUN mamba install --yes \
     'louvain' \
     'mscorefonts' \
     'mudata' \
-    'multicore-tsne' \
     'muon' \
     'openpyxl' \
     'pybiomart' \
@@ -48,3 +44,5 @@ RUN mamba install --yes \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
+
+RUN pip install --no-cache-dir fastcluster
