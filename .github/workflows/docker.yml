@@ -63,11 +63,9 @@ jobs:
 
       - name: Build image 🛠
         run: |
-          docker pull ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test || true
           docker pull ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest || true
           docker build --rm --force-rm \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
-            --cache-from=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test \
             --cache-from=${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
             --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:test image/
         # --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{steps.get_sha.outputs.sha12}}
