@@ -38,11 +38,6 @@ RUN mamba install --yes \
     'scrublet' \
     'scvi-tools' \
     'session-info' \
-    'spatialdata' \
-    'spatialdata-io' \
-    'spatialdata-plot' \
-    'squidpy' \
-    'zarr' \
     # R \
     'bioconductor-singlecellexperiment' \
     'bioconductor-monocle' \
@@ -53,11 +48,3 @@ RUN mamba install --yes \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
-
-# Update packages where their current versions have bugs
-RUN pip --no-cache-dir install \
-    spatial-image \
-    spatialdata \
-    spatialdata-io \
-    spatialdata-plot \
-    --upgrade
