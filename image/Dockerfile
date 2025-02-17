@@ -33,7 +33,7 @@ RUN mamba install --yes \
     'pybiomart' \
     'python-igraph' \
     'scanorama' \
-    'scanpy>=1.10' \
+    'scanpy>=1.10.4' \
     'scirpy' \
     'scrublet' \
     'scvi-tools' \
@@ -44,7 +44,7 @@ RUN mamba install --yes \
     'bioconductor-mast' \
     'bioconductor-scater' \
     'bioconductor-scran' \
-    'r-seurat' && \
+    'r-seurat>=5.1.0' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
