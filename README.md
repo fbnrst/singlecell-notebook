@@ -1,4 +1,4 @@
-[![Build](https://github.com/fbnrst/singlecell-notebook/actions/workflows/docker.yml/badge.svg)](https://github.com/fbnrst/singlecell-notebook/actions/workflows/docker.yml)
+[![Build, test, and publish Docker Images](https://github.com/fbnrst/singlecell-notebook/actions/workflows/docker.yml/badge.svg?branch=main&event=push)](https://github.com/fbnrst/singlecell-notebook/actions/workflows/docker.yml)
 
 # singlecell-notebook
 
