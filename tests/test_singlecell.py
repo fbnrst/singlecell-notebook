@@ -17,6 +17,7 @@ def test_anndata2ri():
 
 def test_pca_reproducibility_sklearn():
     """Test reproducibility of PCA for sparse data using sklearn."""
+    np.random.seed(42)
     X = random(2700, 32738, density=2286884/(2700*32738), format='csr', dtype='int32', data_rvs=lambda s: np.random.randint(0, 501, size=s))
     pca_ = PCA(n_components=50, svd_solver='arpack', random_state=0)
     X_pca_0 = pca_.fit_transform(X).copy()
