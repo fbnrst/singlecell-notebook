@@ -75,6 +75,11 @@ jobs:
       - name: Build image 🛠
         run: |
           docker build --rm --force-rm \
+            --build-arg CONTAINER_BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+            --build-arg CONTAINER_IMAGE_NAME=${{ env.IMAGE_NAME }} \
+            --build-arg CONTAINER_GIT_REPOSITORY=${{ github.repository }} \
+            --build-arg CONTAINER_GIT_COMMIT=${{steps.get_sha.outputs.sha12}}
+            --build-arg CONTAINER_VERSION=${{ env.TAG }} \
             --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:${{ env.TAG }} \
             --tag ${{ env.OWNER }}/${{ env.IMAGE_NAME }}:latest \
             image/ 
