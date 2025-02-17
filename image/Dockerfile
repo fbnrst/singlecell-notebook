@@ -1,4 +1,4 @@
-FROM quay.io/jupyter/datascience-notebook:x86_64-2025-02-12
+FROM quay.io/jupyter/datascience-notebook:x86_64-latest
 
 USER root
 
